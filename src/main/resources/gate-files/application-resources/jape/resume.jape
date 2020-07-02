@@ -1,0 +1,145 @@
+Phase: resumeFinder
+Input: ResumeLabel Token SpaceToken
+Options: control = appelt
+
+Macro: PUNCTUATION
+(
+    ({SpaceToken.kind=="space"}|{SpaceToken.kind=="control"}|{Token.kind=="punctuation"})*
+)
+
+Rule: personName
+// 姓名：张三
+(
+   ({ResumeLabel.majorType=="person",ResumeLabel.minorType=="name"})
+   (PUNCTUATION)
+   ({Token.kind=="word"}):name
+)
+-->
+:name.personName = {status="yes"}
+
+Rule: personGender
+// 性别：男
+(
+   ({ResumeLabel.majorType=="person",ResumeLabel.minorType=="gender"})
+   (PUNCTUATION)
+   ({Token.string=="男"}|{Token.string=="女"}|{Token.string=="male"}|{Token.string=="MALE"}|{Token.string=="Male"}|{Token.string=="female"}|{Token.string=="FEMALE"}|{Token.string=="Female"}):gender
+)
+-->
+:gender.personGender = {status="yes"}
+
+Rule: personAge
+// 年龄：25
+(
+   ({ResumeLabel.majorType=="person",ResumeLabel.minorType=="age"})
+   (PUNCTUATION)
+   ({Token.kind=="number"}):age
+)
+-->
+:age.personAge = {status="yes"}
+
+Rule: personBirthday
+// 生日：2008.08.08 2008/08/08 2008-08-08
+(
+   ({ResumeLabel.majorType=="person",ResumeLabel.minorType=="birthday"})
+   (PUNCTUATION)
+   (({Token.kind=="number"}({SpaceToken.kind=="space"})*{Token.kind=="punctuation"}({SpaceToken.kind=="space"})*)+({Token.kind=="number"})*):birthday
+)
+-->
+:birthday.personBirthday = {status="yes"}
+
+Rule: eduLevel
+// 最高学历：大专、本科、硕士、博士、博士后
+(
+   ({ResumeLabel.majorType=="edu",ResumeLabel.minorType=="level"})
+   (PUNCTUATION)
+   ({Token.string=="大专"}|{Token.string=="本科"}|{Token.string=="硕士"}|{Token.string=="博士后"}|{Token.string=="博士"}):eduLevelToken
+)
+-->
+:eduLevelToken.eduLevel = {status="yes"}
+
+Rule: eduLevels
+// 学历：大专、本科、硕士、博士、博士后
+(
+   ({Token.string=="大专"}|{Token.string=="本科"}|{Token.string=="硕士"}|{Token.string=="硕士研究生"}|{Token.string=="博士后"}|{Token.string=="博士"}|{Token.string=="博士研究生"}):eduLevelsToken
+)
+-->
+:eduLevelsToken.eduLevels = {status="yes"}
+
+Rule: personPhone
+// 手机：13888888888
+({ResumeLabel.majorType=="person",ResumeLabel.minorType=="phone"})
+   (PUNCTUATION)
+   ({Token.kind=="number"}):phone
+-->
+:phone.personPhone = {status="yes"}
+
+Rule: personPhones
+// 13888888888
+({Token.kind=="number",Token.length==11}):phone2
+-->
+:phone2.personPhones = {status="yes"}
+
+Rule: jobCity
+// 期望地点：杭州
+(
+   ({ResumeLabel.majorType=="job",ResumeLabel.minorType=="location"})
+   (PUNCTUATION)
+   ({Token.kind=="word"}):jobCityToken
+)
+-->
+:jobCityToken.jobCity = {status="yes"}
+
+Rule: personPlace
+// 现居住地：杭州
+(
+   ({ResumeLabel.majorType=="person",ResumeLabel.minorType=="place"})
+   (PUNCTUATION)
+   ({Token.kind=="word"}):personPlaceToken
+)
+-->
+:personPlaceToken.personPlace = {status="yes"}
+
+Rule: jobIntent
+// 应聘职位：软件工程师
+(
+   ({ResumeLabel.majorType=="job",ResumeLabel.minorType=="intent"})
+   (PUNCTUATION)
+   ((({Token.kind=="word"}|{Token.kind=="number"})+({Token.kind=="punctuation"})*)+):jobIntentToken
+)
+-->
+:jobIntentToken.jobIntent = {status="yes"}
+
+Phase: EmailFinder
+Input: Address
+Options: control = appelt debug = false
+
+Rule: personEmail
+// 电子邮箱
+(
+  {Address.kind == email,Address.ruleFinal == EmailFinal}
+):email
+-->
+:email.personEmail = {status="yes"}
+
+Phase: WorkExperienceFinder
+Input: ResumeLabel Token SpaceToken
+Options: control = appelt debug = false
+
+Rule: jobExperience
+// 工作经历
+(
+   ({ResumeLabel.majorType=="job",ResumeLabel.minorType=="experience"})
+   (({Token,!ResumeLabel}|{SpaceToken})*):jobExperienceToken
+)
+-->
+:jobExperienceToken.jobExperience = {status="yes"}
+
+Rule: eduExperience
+// 教育经历
+(
+   ({ResumeLabel.majorType=="edu",ResumeLabel.minorType=="experience"})
+   ({SpaceToken}|{Token.kind=="punctuation"})+
+   (({Token,!ResumeLabel}|{SpaceToken})*):eduExperienceToken
+)
+-->
+:eduExperienceToken.eduExperience = {status="yes"}
