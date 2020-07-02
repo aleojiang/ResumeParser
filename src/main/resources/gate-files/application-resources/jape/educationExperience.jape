@@ -1,0 +1,13 @@
+Phase: eduExpTimeRangeFinder
+Input: Token SpaceToken
+Options: control = appelt
+
+Rule: eduExpTime
+// 开始时间：2008.08.08
+(
+    ({Token.kind=="number"}(({Token.string=="/"}|{Token.string=="."}|{Token.string=="-"}|{Token.string=="–"}){Token.kind=="number"})[1,2]):beginTime
+	({SpaceToken.kind=="space"})*({Token.string=="-"}|{Token.string=="–"}|{Token.string=="~"})?({SpaceToken.kind=="space"})*
+	(({Token.kind=="number"}(({Token.string=="/"}|{Token.string=="."}|{Token.string=="-"}|{Token.string=="–"}){Token.kind=="number"})[1,2])|({Token.string=="至今"})):endTime
+)
+-->
+:beginTime.eduExpBeginTime = {language="zh_CN", majorTyp="edu_exp", minorType="beginTime"}, :endTime.eduExpEndTime = {language="zh_CN", majorTyp="edu_exp", minorType="endTime"}
