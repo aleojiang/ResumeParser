@@ -3,6 +3,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
 }
+apply plugin: "eclipse-wtp"
 
 group = 'com.cuckoo-spring'
 version = '0.0.1-SNAPSHOT'

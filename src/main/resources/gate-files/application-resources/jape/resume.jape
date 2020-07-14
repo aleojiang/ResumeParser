@@ -79,6 +79,14 @@ Rule: personPhones
 -->
 :phone2.personPhones = {status="yes"}
 
+Rule: personEmail
+// 电子邮箱
+({ResumeLabel.majorType=="person",ResumeLabel.minorType=="email"})
+   (PUNCTUATION)
+   (({Token.string=="@"}|{Token.string=="."}|{Token.string=="-"}|{Token.string=="_"}|{Token.kind=="word"}|{Token.kind=="number"})*):email
+-->
+:email.personEmail = {status="yes"}
+
 Rule: jobCity
 // 期望地点：杭州
 (
@@ -108,18 +116,6 @@ Rule: jobIntent
 )
 -->
 :jobIntentToken.jobIntent = {status="yes"}
-
-Phase: EmailFinder
-Input: Address
-Options: control = appelt debug = false
-
-Rule: personEmail
-// 电子邮箱
-(
-  {Address.kind == email,Address.ruleFinal == EmailFinal}
-):email
--->
-:email.personEmail = {status="yes"}
 
 Phase: WorkExperienceFinder
 Input: ResumeLabel Token SpaceToken

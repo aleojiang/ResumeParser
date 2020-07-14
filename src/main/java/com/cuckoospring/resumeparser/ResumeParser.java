@@ -154,11 +154,19 @@ public final class ResumeParser {
         Resume resume = new Resume();
         try {
             // 姓名
-            resume.setName(getContent(set.get("personName"), content));
+            resume.setName(getContent(set.get(ResumeParserConsts.ANNOTATION_PERSON_NAME), content));
             // 性别
-            resume.setGender(getGender(getContent(set.get("personGender"), content)));
+            resume.setGender(getGender(getContent(set.get(ResumeParserConsts.ANNOTATION_PERSON_GENDER), content)));
             // 生日
-            getBirthDay(getContent(set.get("personBirthday"), content), resume);
+            getBirthDay(getContent(set.get(ResumeParserConsts.ANNOTATION_PERSON_BIRTHDAY), content), resume);
+            // 应聘职位
+            resume.setJob(getContent(set.get(ResumeParserConsts.ANNOTATION_JOB_INTENT), content));
+            // 期望工作地点
+            resume.setWorkPlace(getContent(set.get(ResumeParserConsts.ANNOTATION_JOB_CITY), content));
+            // 手机号码
+            resume.setMobile(getContent(set.get(ResumeParserConsts.ANNOTATION_PERSON_PHONE), content));
+            // 电子邮箱
+            resume.setEmail(getContent(set.get(ResumeParserConsts.ANNOTATION_PERSON_EMAIL), content));
         } catch (Exception e) {
             if (log.isErrorEnabled()) {
                 log.error("", e);

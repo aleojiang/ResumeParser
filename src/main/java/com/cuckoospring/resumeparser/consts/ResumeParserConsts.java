@@ -21,6 +21,27 @@ public class ResumeParserConsts {
     /** Annie 名称：JobExperienceAnnie */
     public static final String JOB_EXPERIENCE_ANNIE = "JobExperienceAnnie";
 
+    /** 注解标签：姓名 - personName */
+    public static final String ANNOTATION_PERSON_NAME = "personName";
+
+    /** 注解标签：性别 - personGender */
+    public static final String ANNOTATION_PERSON_GENDER = "personGender";
+
+    /** 注解标签：生日 - personBirthday */
+    public static final String ANNOTATION_PERSON_BIRTHDAY = "personBirthday";
+
+    /** 注解标签：手机号码 - personPhone */
+    public static final String ANNOTATION_PERSON_PHONE = "personPhone";
+
+    /** 注解标签：电子邮箱 - personEmail */
+    public static final String ANNOTATION_PERSON_EMAIL = "personEmail";
+
+    /** 注解标签：应聘职位 - jobIntent */
+    public static final String ANNOTATION_JOB_INTENT = "jobIntent";
+
+    /** 注解标签：期望工作地点 - jobCity */
+    public static final String ANNOTATION_JOB_CITY = "jobCity";
+
     /** 性别：男 - male */
     public static final String GENDER_MALE = "male";
 
